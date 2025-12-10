@@ -1,24 +1,21 @@
 <!DOCTYPE html>
 <html lang="pt-br">
 <head>
-    <meta http-equiv="refresh" content="7200">
     <meta charset="UTF-8">
-    
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-    <meta name="apple-mobile-web-app-capable" content="yes">
-    <meta name="mobile-web-app-capable" content="yes">
-    <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
-    <meta name="theme-color" content="#002b5e"> <title>Diretoria Técnica</title>
-
-    <link rel="icon" type="image/png" href="icon-192.png">
-    <link rel="shortcut icon" type="image/png" href="icon-192.png">
+    <meta name="theme-color" content="#002b5e">
     
+    <link rel="manifest" href="manifest.json">
     <link rel="apple-touch-icon" href="icon-192.png">
-    
-    <link rel="icon" sizes="192x192" href="icon-192.png">
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+    <meta name="apple-mobile-web-app-title" content="Portfolio Lucena">
+
+    <link rel="icon" type="image/png" href="icon-512.png">
+
+    <title>Portfolio Lucena</title>
     
     <style>
-        /* --- ESTILOS GERAIS --- */
         body, html {
             margin: 0;
             padding: 0;
@@ -26,51 +23,19 @@
             height: 100%;
             background-color: #000;
             overflow: hidden;
-            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-            /* Impede seleção e zoom */
+            font-family: 'Segoe UI', sans-serif;
             user-select: none;
             -webkit-user-select: none;
-            touch-action: none; 
         }
 
-        .container {
-            position: relative;
-            width: 100vw;
-            height: 100vh;
-        }
-
-        /* --- IFRAME (POWER BI) --- */
-        iframe {
-            position: absolute;
-            top: 0;
-            left: 0;
-            border: none;
-            opacity: 0; /* Começa invisível */
-            transition: opacity 1s ease-in;
-            z-index: 1;
-        }
-
-        /* Classe que será adicionada via JS quando terminar de carregar */
-        iframe.loaded {
-            opacity: 1;
-        }
-
-        .modo-powerbi {
-            width: 101% !important;
-            height: 109vh !important;
-            margin-top: -5px;
-            margin-left: -8px;
-        }
-
-        /* --- TELA DE CARREGAMENTO (LOADING SCREEN) --- */
+        /* Loading Screen */
         #loading-screen {
             position: fixed;
             top: 0;
             left: 0;
             width: 100%;
             height: 100%;
-            /* DEGRADÊ (Usando as cores da imagem: Azul Escuro para Azul Médio) */
-            background: linear-gradient(135deg, #001f3f 0%, #004e92 100%);
+            background: linear-gradient(135deg, #0f2027 0%, #203a43 50%, #2c5364 100%);
             z-index: 9999;
             display: flex;
             flex-direction: column;
@@ -79,105 +44,101 @@
             transition: opacity 0.8s ease-out, visibility 0.8s;
         }
 
-        /* Quando adicionarmos a classe 'hidden', o loader desaparece */
         #loading-screen.hidden {
             opacity: 0;
             visibility: hidden;
             pointer-events: none;
         }
 
-        .logo-container {
-            margin-bottom: 20px;
-            /* Animação sutil de pulso na logo */
-            animation: pulse 2s infinite ease-in-out;
-        }
-
         .logo-container img {
-            width: 150px; /* Ajuste o tamanho da logo na tela de carregamento aqui */
+            width: 140px;
             height: auto;
-            /* Sombra suave para destacar do fundo */
-            drop-shadow: 0 4px 8px rgba(0,0,0,0.4);
+            margin-bottom: 20px;
+            filter: drop-shadow(0 0 10px rgba(0,0,0,0.5));
+            animation: pulse 2s infinite;
         }
 
         .loading-text {
-            color: #ffffff;
+            color: #fff;
             font-size: 18px;
-            font-weight: 300;
-            letter-spacing: 3px;
+            letter-spacing: 2px;
             text-transform: uppercase;
-            margin-bottom: 30px;
-            text-shadow: 0 2px 4px rgba(0,0,0,0.2);
+            margin-bottom: 20px;
         }
 
-        /* Spinner (Círculo girando abaixo do texto) */
         .spinner {
-            width: 40px;
-            height: 40px;
-            border: 3px solid rgba(255, 255, 255, 0.1);
+            width: 35px;
+            height: 35px;
+            border: 3px solid rgba(255,255,255,0.2);
+            border-top-color: #fff;
             border-radius: 50%;
-            border-top-color: #fff; /* Cor da parte que gira */
-            animation: spin 1s ease-in-out infinite;
+            animation: spin 1s linear infinite;
         }
 
-        /* --- ANIMAÇÕES --- */
-        @keyframes spin {
-            to { transform: rotate(360deg); }
+        /* Iframe Container */
+        .container {
+            width: 100vw;
+            height: 100vh;
+            position: relative;
         }
 
-        @keyframes pulse {
-            0% { transform: scale(1); opacity: 1; }
-            50% { transform: scale(1.05); opacity: 0.9; }
-            100% { transform: scale(1); opacity: 1; }
+        iframe {
+            width: 100%;
+            height: 100%;
+            border: none;
+            position: absolute;
+            top: 0;
+            left: 0;
         }
 
+        /* Power BI Cut (Ajuste de bordas) */
+        .modo-powerbi {
+            width: 101% !important;
+            height: 109vh !important;
+            margin-top: -5px;
+            margin-left: -8px;
+        }
+
+        @keyframes spin { to { transform: rotate(360deg); } }
+        @keyframes pulse { 0% { transform: scale(1); } 50% { transform: scale(1.05); } 100% { transform: scale(1); } }
     </style>
 </head>
 <body>
 
     <div id="loading-screen">
         <div class="logo-container">
-            <img src="icon-192.png" alt="Logo Diretoria Técnica">
+            <img src="icon-512.png" alt="Logo Portfolio Lucena">
         </div>
-        <div class="loading-text">Carregando Projetos</div>
+        <div class="loading-text">Portfolio Lucena</div>
         <div class="spinner"></div>
     </div>
 
     <div class="container">
-        <iframe id="display-frame" class="modo-powerbi" allowfullscreen></iframe>
+        <iframe id="display-frame" class="modo-powerbi" 
+                src="https://app.powerbi.com/view?r=eyJrIjoiZDE0NDI2OWQtZmI1Zi00YTJlLWFiNmUtZWYwZjRhNDMzZTUxIiwidCI6IjliMjc5MzAzLWY1ZWMtNDg5OC1hMzFjLWQ4NTZlOTcwN2EzZSJ9&pageName=d939c6f9bd82a253938a" 
+                allowfullscreen>
+        </iframe>
     </div>
 
     <script>
-        // ==========================================
-        // CONFIGURAÇÃO
-        // ==========================================
-        
-        const urlUnica = "https://app.powerbi.com/view?r=eyJrIjoiZDE0NDI2OWQtZmI1Zi00YTJlLWFiNmUtZWYwZjRhNDMzZTUxIiwidCI6IjliMjc5MzAzLWY1ZWMtNDg5OC1hMzFjLWQ4NTZlOTcwN2EzZSJ9&pageName=d939c6f9bd82a253938a";
-        
-        // Tempo que a tela de carregamento fica visível (em milissegundos)
-        // 5000ms = 5 segundos (Tempo seguro para o Power BI iniciar)
-        const tempoCarregamento = 5000; 
-
-        // ==========================================
-
-        const iframe = document.getElementById('display-frame');
-        const loader = document.getElementById('loading-screen');
-
-        // Define o link do iframe
-        if (urlUnica) {
-            iframe.src = urlUnica;
-        }
-
-        // Função que esconde a tela de carregamento e mostra o iframe
-        function finalizarCarregamento() {
-            loader.classList.add('hidden');
-            iframe.classList.add('loaded');
-        }
-
-        // Inicia a contagem assim que a página carrega
+        // 1. Controle da Tela de Carregamento
         window.addEventListener('load', () => {
-            setTimeout(finalizarCarregamento, tempoCarregamento);
+            setTimeout(() => {
+                document.getElementById('loading-screen').classList.add('hidden');
+            }, 4000); // 4 segundos de loading
         });
 
+        // 2. Registro do Service Worker (Necessário para instalar o App)
+        if ('serviceWorker' in navigator) {
+            window.addEventListener('load', () => {
+                navigator.serviceWorker.register('./sw.js')
+                    .then(registration => {
+                        console.log('ServiceWorker registrado com sucesso: ', registration.scope);
+                    }, err => {
+                        console.log('Falha no registro do ServiceWorker: ', err);
+                    });
+            });
+        }
     </script>
 </body>
 </html>
