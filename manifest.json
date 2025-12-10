@@ -1,11 +1,11 @@
 {
-  "name": "Diretoria Técinica TV",
-  "short_name": "Diretoria Técinica TV",
-  "start_url": "index.html",
-  "display": "fullscreen",
-  "background_color": "#000000",
-  "theme_color": "#000000",
-  "orientation": "any",
+  "name": "Portfolio Lucena",
+  "short_name": "Lucena",
+  "start_url": "./index.html",
+  "display": "standalone",
+  "background_color": "#002b5e",
+  "theme_color": "#002b5e",
+  "orientation": "portrait",
   "icons": [
     {
       "src": "icon-192.png",
