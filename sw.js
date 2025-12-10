@@ -1,4 +1,4 @@
-const CACHE_NAME = 'portfolio-lucena-v1';
+const CACHE_NAME = 'portfolio-lucena-v2';
 const urlsToCache = [
   './',
   './index.html',
