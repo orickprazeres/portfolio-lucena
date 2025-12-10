@@ -9,6 +9,13 @@
     <meta name="mobile-web-app-capable" content="yes">
     <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
     <meta name="theme-color" content="#002b5e"> <title>Diretoria Técnica</title>
+
+    <link rel="icon" type="image/png" href="image_1.png">
+    <link rel="shortcut icon" type="image/png" href="image_1.png">
+    
+    <link rel="apple-touch-icon" href="image_1.png">
+    
+    <link rel="icon" sizes="192x192" href="image_1.png">
     
     <style>
         /* --- ESTILOS GERAIS --- */
@@ -20,6 +27,7 @@
             background-color: #000;
             overflow: hidden;
             font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            /* Impede seleção e zoom */
             user-select: none;
             -webkit-user-select: none;
             touch-action: none; 
@@ -37,11 +45,12 @@
             top: 0;
             left: 0;
             border: none;
-            opacity: 0; /* Começa invisível, aparece quando o loader sair */
+            opacity: 0; /* Começa invisível */
             transition: opacity 1s ease-in;
             z-index: 1;
         }
 
+        /* Classe que será adicionada via JS quando terminar de carregar */
         iframe.loaded {
             opacity: 1;
         }
@@ -60,7 +69,7 @@
             left: 0;
             width: 100%;
             height: 100%;
-            /* DEGRADÊ PROFISSIONAL (AZUL ESCURO -> AZUL MÉDIO) */
+            /* DEGRADÊ (Usando as cores da imagem: Azul Escuro para Azul Médio) */
             background: linear-gradient(135deg, #001f3f 0%, #004e92 100%);
             z-index: 9999;
             display: flex;
@@ -79,13 +88,15 @@
 
         .logo-container {
             margin-bottom: 20px;
+            /* Animação sutil de pulso na logo */
             animation: pulse 2s infinite ease-in-out;
         }
 
         .logo-container img {
-            width: 120px; /* Tamanho da logo */
+            width: 150px; /* Ajuste o tamanho da logo na tela de carregamento aqui */
             height: auto;
-            drop-shadow: 0 4px 6px rgba(0,0,0,0.3);
+            /* Sombra suave para destacar do fundo */
+            drop-shadow: 0 4px 8px rgba(0,0,0,0.4);
         }
 
         .loading-text {
@@ -98,13 +109,13 @@
             text-shadow: 0 2px 4px rgba(0,0,0,0.2);
         }
 
-        /* Spinner (Círculo girando) */
+        /* Spinner (Círculo girando abaixo do texto) */
         .spinner {
             width: 40px;
             height: 40px;
             border: 3px solid rgba(255, 255, 255, 0.1);
             border-radius: 50%;
-            border-top-color: #fff; /* Cor da parte giratória */
+            border-top-color: #fff; /* Cor da parte que gira */
             animation: spin 1s ease-in-out infinite;
         }
 
@@ -125,7 +136,7 @@
 
     <div id="loading-screen">
         <div class="logo-container">
-            <img src="icon-512.png" alt="Logo Empresa">
+            <img src="image_1.png" alt="Logo Diretoria Técnica">
         </div>
         <div class="loading-text">Carregando Projetos</div>
         <div class="spinner"></div>
@@ -142,8 +153,8 @@
         
         const urlUnica = "https://app.powerbi.com/view?r=eyJrIjoiZDE0NDI2OWQtZmI1Zi00YTJlLWFiNmUtZWYwZjRhNDMzZTUxIiwidCI6IjliMjc5MzAzLWY1ZWMtNDg5OC1hMzFjLWQ4NTZlOTcwN2EzZSJ9&pageName=d939c6f9bd82a253938a";
         
-        // Tempo em milissegundos que a tela de carregamento vai ficar visível
-        // Power BI costuma demorar, então 5000ms (5 segundos) é um bom tempo para garantir
+        // Tempo que a tela de carregamento fica visível (em milissegundos)
+        // 5000ms = 5 segundos (Tempo seguro para o Power BI iniciar)
         const tempoCarregamento = 5000; 
 
         // ==========================================
@@ -151,18 +162,18 @@
         const iframe = document.getElementById('display-frame');
         const loader = document.getElementById('loading-screen');
 
-        // Carrega o link
+        // Define o link do iframe
         if (urlUnica) {
             iframe.src = urlUnica;
         }
 
-        // Função para esconder o loader e mostrar o iframe
+        // Função que esconde a tela de carregamento e mostra o iframe
         function finalizarCarregamento() {
             loader.classList.add('hidden');
             iframe.classList.add('loaded');
         }
 
-        // Aguarda o tempo definido antes de tirar a tela de carregamento
+        // Inicia a contagem assim que a página carrega
         window.addEventListener('load', () => {
             setTimeout(finalizarCarregamento, tempoCarregamento);
         });
