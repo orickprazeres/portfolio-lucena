@@ -1,6 +1,6 @@
 {
   "name": "Portfolio Lucena",
-  "short_name": "Lucena",
+  "short_name": "Portfolio Lucena",
   "start_url": "./index.html",
   "display": "standalone",
   "background_color": "#002b5e",
