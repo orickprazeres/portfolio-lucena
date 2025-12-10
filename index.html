@@ -1,48 +1,76 @@
 <!DOCTYPE html>
-<html lang="pt-BR">
+<html lang="pt-br">
 <head>
-  <meta charset="utf-8">
-  <title>Lucena - Diretoria TV</title>
+    <meta http-equiv="refresh" content="7200">
+    <meta charset="UTF-8">
+    
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <meta name="apple-mobile-web-app-capable" content="yes"> <meta name="mobile-web-app-capable" content="yes"> <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+    <meta name="theme-color" content="#000000">
 
-  <link rel="manifest" href="manifest.json">
+    <title>Meu App de Visualização</title>
+    
+    <style>
+        body, html {
+            margin: 0;
+            padding: 0;
+            width: 100%;
+            height: 100%;
+            background-color: #000;
+            overflow: hidden;
+            /* Impede o usuário de selecionar texto ou dar zoom */
+            user-select: none;
+            -webkit-user-select: none;
+            touch-action: none; 
+        }
 
-  <!-- iOS fullscreen -->
-  <meta name="apple-mobile-web-app-capable" content="yes">
-  <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+        .container {
+            position: relative;
+            width: 100vw;
+            height: 100vh;
+        }
 
-  <!-- Android theme -->
-  <meta name="theme-color" content="#000000">
+        iframe {
+            position: absolute;
+            top: 0;
+            left: 0;
+            border: none;
+        }
 
-  <meta name="viewport" content="width=device-width, initial-scale=1">
+        /* MODO POWER BI (Corta as bordas) */
+        .modo-powerbi {
+            width: 101% !important;
+            height: 109vh !important;
+            margin-top: -5px;
+            margin-left: -8px;
+        }
 
-  <style>
-    html, body {
-      margin: 0;
-      padding: 0;
-      height: 100%;
-      overflow: hidden;
-      background: #000;
-    }
-    iframe {
-      width: 100vw;
-      height: 100vh;
-      border: none;
-      display: block;
-    }
-  </style>
+        /* MODO SITE NORMAL (Ajuste exato) */
+        .modo-normal {
+            width: 100% !important;
+            height: 100% !important;
+            margin: 0;
+        }
+    </style>
 </head>
 <body>
 
-<iframe 
-  src="https://powerportal.com.br/gerados/Portfolio_Lucena_27112025-PowerBiTvTool.html"
-  allow="fullscreen">
-</iframe>
+    <div class="container">
+        <iframe id="display-frame" class="modo-powerbi" allowfullscreen></iframe>
+    </div>
 
-<script>
-  if ('serviceWorker' in navigator) {
-    navigator.serviceWorker.register('sw.js');
-  }
-</script>
+    <script>
+        // ==========================================
+        // CONFIGURAÇÃO: COLOQUE SEU LINK AQUI
+        // ==========================================
+        
+        const urlUnica = "https://app.powerbi.com/view?r=eyJrIjoiZDE0NDI2OWQtZmI1Zi00YTJlLWFiNmUtZWYwZjRhNDMzZTUxIiwidCI6IjliMjc5MzAzLWY1ZWMtNDg5OC1hMzFjLWQ4NTZlOTcwN2EzZSJ9&pageName=d939c6f9bd82a253938a";
 
+        // ==========================================
+
+        if (urlUnica) {
+            document.getElementById('display-frame').src = urlUnica;
+        }
+    </script>
 </body>
 </html>
