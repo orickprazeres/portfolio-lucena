@@ -5,12 +5,13 @@
     <meta charset="UTF-8">
     
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-    <meta name="apple-mobile-web-app-capable" content="yes"> <meta name="mobile-web-app-capable" content="yes"> <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
-    <meta name="theme-color" content="#000000">
-
-    <title>Diretoria Técnica</title>
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+    <meta name="theme-color" content="#002b5e"> <title>Diretoria Técnica</title>
     
     <style>
+        /* --- ESTILOS GERAIS --- */
         body, html {
             margin: 0;
             padding: 0;
@@ -18,7 +19,7 @@
             height: 100%;
             background-color: #000;
             overflow: hidden;
-            /* Impede o usuário de selecionar texto ou dar zoom */
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
             user-select: none;
             -webkit-user-select: none;
             touch-action: none; 
@@ -30,14 +31,21 @@
             height: 100vh;
         }
 
+        /* --- IFRAME (POWER BI) --- */
         iframe {
             position: absolute;
             top: 0;
             left: 0;
             border: none;
+            opacity: 0; /* Começa invisível, aparece quando o loader sair */
+            transition: opacity 1s ease-in;
+            z-index: 1;
         }
 
-        /* MODO POWER BI (Corta as bordas) */
+        iframe.loaded {
+            opacity: 1;
+        }
+
         .modo-powerbi {
             width: 101% !important;
             height: 109vh !important;
@@ -45,15 +53,83 @@
             margin-left: -8px;
         }
 
-        /* MODO SITE NORMAL (Ajuste exato) */
-        .modo-normal {
-            width: 100% !important;
-            height: 100% !important;
-            margin: 0;
+        /* --- TELA DE CARREGAMENTO (LOADING SCREEN) --- */
+        #loading-screen {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            /* DEGRADÊ PROFISSIONAL (AZUL ESCURO -> AZUL MÉDIO) */
+            background: linear-gradient(135deg, #001f3f 0%, #004e92 100%);
+            z-index: 9999;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            transition: opacity 0.8s ease-out, visibility 0.8s;
         }
+
+        /* Quando adicionarmos a classe 'hidden', o loader desaparece */
+        #loading-screen.hidden {
+            opacity: 0;
+            visibility: hidden;
+            pointer-events: none;
+        }
+
+        .logo-container {
+            margin-bottom: 20px;
+            animation: pulse 2s infinite ease-in-out;
+        }
+
+        .logo-container img {
+            width: 120px; /* Tamanho da logo */
+            height: auto;
+            drop-shadow: 0 4px 6px rgba(0,0,0,0.3);
+        }
+
+        .loading-text {
+            color: #ffffff;
+            font-size: 18px;
+            font-weight: 300;
+            letter-spacing: 3px;
+            text-transform: uppercase;
+            margin-bottom: 30px;
+            text-shadow: 0 2px 4px rgba(0,0,0,0.2);
+        }
+
+        /* Spinner (Círculo girando) */
+        .spinner {
+            width: 40px;
+            height: 40px;
+            border: 3px solid rgba(255, 255, 255, 0.1);
+            border-radius: 50%;
+            border-top-color: #fff; /* Cor da parte giratória */
+            animation: spin 1s ease-in-out infinite;
+        }
+
+        /* --- ANIMAÇÕES --- */
+        @keyframes spin {
+            to { transform: rotate(360deg); }
+        }
+
+        @keyframes pulse {
+            0% { transform: scale(1); opacity: 1; }
+            50% { transform: scale(1.05); opacity: 0.9; }
+            100% { transform: scale(1); opacity: 1; }
+        }
+
     </style>
 </head>
 <body>
+
+    <div id="loading-screen">
+        <div class="logo-container">
+            <img src="icon-512.png" alt="Logo Empresa">
+        </div>
+        <div class="loading-text">Carregando Projetos</div>
+        <div class="spinner"></div>
+    </div>
 
     <div class="container">
         <iframe id="display-frame" class="modo-powerbi" allowfullscreen></iframe>
@@ -61,16 +137,36 @@
 
     <script>
         // ==========================================
-        // CONFIGURAÇÃO: COLOQUE SEU LINK AQUI
+        // CONFIGURAÇÃO
         // ==========================================
         
         const urlUnica = "https://app.powerbi.com/view?r=eyJrIjoiZDE0NDI2OWQtZmI1Zi00YTJlLWFiNmUtZWYwZjRhNDMzZTUxIiwidCI6IjliMjc5MzAzLWY1ZWMtNDg5OC1hMzFjLWQ4NTZlOTcwN2EzZSJ9&pageName=d939c6f9bd82a253938a";
+        
+        // Tempo em milissegundos que a tela de carregamento vai ficar visível
+        // Power BI costuma demorar, então 5000ms (5 segundos) é um bom tempo para garantir
+        const tempoCarregamento = 5000; 
 
         // ==========================================
 
+        const iframe = document.getElementById('display-frame');
+        const loader = document.getElementById('loading-screen');
+
+        // Carrega o link
         if (urlUnica) {
-            document.getElementById('display-frame').src = urlUnica;
+            iframe.src = urlUnica;
         }
+
+        // Função para esconder o loader e mostrar o iframe
+        function finalizarCarregamento() {
+            loader.classList.add('hidden');
+            iframe.classList.add('loaded');
+        }
+
+        // Aguarda o tempo definido antes de tirar a tela de carregamento
+        window.addEventListener('load', () => {
+            setTimeout(finalizarCarregamento, tempoCarregamento);
+        });
+
     </script>
 </body>
 </html>
