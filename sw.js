@@ -1,4 +1,4 @@
-const CACHE_NAME = 'portfolio-lucena-v4';
+const CACHE_NAME = 'portfolio-lucena-v5';
 const urlsToCache = [
   './',
   './index.html',
@@ -7,26 +7,39 @@ const urlsToCache = [
   './icon-512.png'
 ];
 
-// Instala o Service Worker e cacheia os arquivos principais
+// Instalação do Service Worker
 self.addEventListener('install', event => {
   event.waitUntil(
     caches.open(CACHE_NAME)
       .then(cache => {
-        console.log('Arquivos em cache');
+        console.log('Cache aberto');
         return cache.addAll(urlsToCache);
       })
   );
 });
 
-// Responde com o cache quando offline (ou carrega da rede se online)
+// Ativação e limpeza de caches antigos
+self.addEventListener('activate', event => {
+  event.waitUntil(
+    caches.keys().then(cacheNames => {
+      return Promise.all(
+        cacheNames.map(cacheName => {
+          if (cacheName !== CACHE_NAME) {
+            return caches.delete(cacheName);
+          }
+        })
+      );
+    })
+  );
+});
+
+// Interceptação de requisições
 self.addEventListener('fetch', event => {
   event.respondWith(
     caches.match(event.request)
       .then(response => {
-        if (response) {
-          return response;
-        }
-        return fetch(event.request);
+        // Retorna do cache se encontrar, senão busca na rede
+        return response || fetch(event.request);
       })
   );
 });
